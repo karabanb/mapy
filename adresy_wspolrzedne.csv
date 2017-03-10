@@ -1,0 +1,12 @@
+"","Id","Kraj","miasto","Kod.pocztowy","Ulica","Numer","Pracownik","lon","lat"
+"1",1,"Polska","Lubin",59300,"Asnyka",45,"Jerzy",16.163533,51.4038496
+"2",2,"Polska","Lubin",59300,"Krasickiego",11,"Jerzy",16.2043073,51.4032157
+"3",3,"Polska","Lubin",59300,"Staszica",28,"Jerzy",16.2100833,51.4055436
+"4",4,"Polska","Lubin",59300,"Ptasia",40,"Jerzy",16.205047,51.381785
+"5",5,"Polska","Lubin",59300,"Pawia",38,"Jerzy",16.2074197,51.3876749
+"6",6,"Polska","Wrocław",51116,"Lubińska",18,"Barbara",17.0047119,51.1163139
+"7",7,"Polska","Wrocław",51116,"Wołowska",8,"Barbara",17.026375,51.1461719
+"8",8,"Polska","Wrocław",51116,"Legnicka ",12,"Barbara",17.018871,51.112259
+"9",9,"Polska","Legnica",59200,"Kolejowa",2,"Barbara",16.1682345,51.2133065
+"10",10,"Polska","Legnica",59200,"Pomorska",20,"Barbara",16.205787,51.2001379
+"11",11,"Polska","",59720,"Raciborowice dolne",95,"Barbara",NA,NA
