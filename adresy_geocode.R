@@ -16,7 +16,13 @@ adresy.basia<-read_ods("Trasa Basia.ods")
 
 adresy_lista<-str_split(adresy.basia$Adres,"/",simplify = TRUE)[,1]
 
-adresy_paste<-paste(adresy_lista,adresy.basia$Miejscowość, adresy.basia$`Kod pocztowy`, sep=", ")
+ostatnia_spacja<-str_locate(adresy_lista,"[:space:][0-9]")
+numer_domu<-str_trim(str_sub(adresy_lista, ostatnia_spacja[,1], str_length(adresy_lista)))
+ulica<-str_sub(adresy_lista, 1, ostatnia_spacja[,1]-1)
+
+adresy_paste2<-paste(numer_domu, ulica, adresy.basia$Miejscowość, adresy.basia$`Kod pocztowy`, sep=", ")
+
+#adresy_paste<-paste(adresy_lista,adresy.basia$Miejscowość, adresy.basia$`Kod pocztowy`, sep=", ")
 label.basia<-paste(adresy.basia$Nazwa,
                    paste(adresy.basia$Adres,
                    paste(adresy.basia$`Kod pocztowy`, adresy.basia$Miejscowość, sep=' '), sep="<br/>"), sep="<br/>")
@@ -26,7 +32,7 @@ label.basia<-paste(adresy.basia$Nazwa,
 #### checking geocodes ######
 
 #b<-geocode(a)
-geocode.basia<-geocode(adresy_paste)
+geocode.basia<-geocode(adresy_paste2)
 
 d<-cbind(adresy,b,label)
 
