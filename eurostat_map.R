@@ -24,13 +24,19 @@ ggplot(mapdata, aes(x=long,y=lat,group=group))+
 
  ##### mapa do tableau ######
 
-unempolyement<-get_eurostat("ei_lmhr_m")%>%filter(time>="2005-01-01")
+unempolyement<-get_eurostat("ei_lmhr_m")%>%filter(time>="2005-01-01",s_adj=="SA")
 unempolyement$time<-str_sub(as.character(unempolyement$time),0,7)
 
 ## trying join...
 
 unempolyement.join<-full_join(unempolyement,eu_countries, by=c("geo"="code"))%>%na.omit()
 write.table(unempolyement.join,"unemployement.csv", row.names = FALSE, quote = FALSE, sep=",")
+
+## reshape data...
+unempolyement.join.pivot<-unempolyement.join%>%
+  filter(indic %in% c('LM-UN-F-TOT','LM-UN-M-TOT','LM-UN-T-TOT'))%>%
+  spread(indic,values)
+write.table(unempolyement.join.pivot,"unemployement_pivot.csv", row.names = FALSE, quote = FALSE, sep=",")
 
 
 
