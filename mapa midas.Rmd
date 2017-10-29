@@ -1,0 +1,66 @@
+---
+title: "Mapy"
+author: "Bartek"
+date: "29 10 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## biblioteki
+
+```{r cars}
+library(ggmap)
+library(dplyr)
+library(stringr)
+```
+
+## pobranie plików
+
+```{r}
+
+papierosy <- read.table(file = "papierosy.csv", header = TRUE, sep = ";")
+wszytsko <- read.table(file = "cala.csv", header = TRUE, sep = ";")
+prz.PM <- read.table(file = "prz_PM.csv", header = TRUE, sep = ";")
+prz.Anna <- read.table(file = "prz_Anna.csv", header = TRUE, sep = ";")
+prz.Tomek <- read.table(file = "prz_Tomasz.csv", header = TRUE, sep = ";")
+
+```
+
+## przygotowanie danych
+
+```{r message=FALSE, warning=FALSE}
+papierosy$asortyment <- as.factor("papierosy")
+wszytsko$asortyment <- as.factor("wszytsko")
+
+asortyment <- left_join(wszytsko, select(papierosy, Symbol,asortyment), by="Symbol")
+asortyment$asortyment <-if_else(is.na(asortyment$asortyment.y)==TRUE,'bez.art.tyton','art.tyton')
+
+przedstawiciel <- rbind(prz.PM, prz.Anna, prz.Tomek)
+
+asortyment <- select(left_join(asortyment, przedstawiciel), - asortyment.x, - asortyment.y)
+```
+
+
+```{r}
+adresy_lista<-str_split(asortyment$Adres,"/",simplify = TRUE)[,1]
+ostatnia_spacja<-str_locate(adresy_lista,"[:space:][0-9]")
+numer_domu<-str_trim(str_sub(adresy_lista, ostatnia_spacja[,1], str_length(adresy_lista)))
+ulica<-str_sub(adresy_lista, 1, ostatnia_spacja[,1]-1)
+
+adresy.paste<-paste(numer_domu, ulica, asortyment$Miejscowość, asortyment$Kod.pocztowy, sep=", ")
+```
+## geogkodowanie i eksport
+
+```{r message=FALSE, warning=FALSE}
+adresy.geo <-geocode(adresy.paste)
+
+adresy.geo.trim <- as.data.frame(sapply(adresy.geo, round, digits = 5))
+
+adresy <- bind_cols(asortyment, adresy.geo.trim)
+
+write.table(adresy, "adresy.csv", row.names = FALSE, sep = ";", dec = ",")
+```
+
